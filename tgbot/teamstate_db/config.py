@@ -1,4 +1,4 @@
-password ='teamstate@089'
+password ='ilnur'
 user = 'postgres'
 host = 'localhost'
 database = 'teamstate'

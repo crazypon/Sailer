@@ -17,7 +17,7 @@ class Worker(Base):
 
 class Item(Base):
     __tablename__ = "items"
-    id = Column(Integer(), Sequence("ite_id_seq"))
+    id = Column(Integer(), Sequence("ite_id_seq"), primary_key=True)
     item_name = Column(String(), unique=True)
     price = Column(BigInteger())
 
@@ -26,7 +26,7 @@ class Purchase(Base):
     __tablename__ = "purchases"
     id = Column(BigInteger(), Sequence("sold_items_seq"), primary_key=True)
     login = Column(String(), ForeignKey("workers.login"), unique=True)
-    sold_item_id = Column(Integer(), ForeignKey("item.id"))
+    sold_item_id = Column(Integer(), ForeignKey("items.id"))
     # creating relationship
     relationship_for_worker = relationship('Worker')
     relationship_for_item = relationship('Item')
