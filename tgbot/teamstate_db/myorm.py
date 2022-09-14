@@ -10,7 +10,7 @@ Base = declarative_base()
 
 class Worker(Base):
     __tablename__ = "workers"
-    id = Column(Integer(), Sequence("worker_id_seq"), primary_key=True)
+    id = Column(Integer(), primary_key=True)
     user_id = Column(Integer(), unique=True)
     login = Column(String(), unique=True)
     password_hash = Column(String(128))
@@ -58,9 +58,13 @@ class DBCommands:
         await self.session.commit()
 
     async def get_post_ids(self, post):
+        # returns list of post ids
         stmt = select(Worker.user_id).where(Worker.post == post)
         val = await self.session.execute(stmt)
-        user_ids = val.all()
+        user_vals = val.all()
+        user_ids = []
+        for item in user_vals:
+            user_ids.append(item[0])
         return user_ids
 
     async def check_worker_login(self, login):

@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 
 logging.basicConfig(
     level=logging.ERROR,
-    format="%(acstime)s - %(levelname)s - %(name)s - %(message)s",
+    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
 )
 
 

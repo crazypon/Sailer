@@ -17,7 +17,7 @@ class IsDirectorFilter(BoundFilter):
         data = ctx_data.get()
         repo = data.get("repo")
         director_ids = await repo.get_post_ids("director")
-        return message.from_user.id == director_ids
+        return message.from_user.id in director_ids
 
 
 class IsManagerFilter(BoundFilter):
@@ -34,7 +34,7 @@ class IsManagerFilter(BoundFilter):
         data = ctx_data.get()
         repo = data.get("repo")
         is_manager = await repo.get_post_ids("manager")
-        return message.from_user.id == is_manager
+        return message.from_user.id in is_manager
 
 
 class IsWorkerFilter(BoundFilter):
@@ -51,7 +51,7 @@ class IsWorkerFilter(BoundFilter):
         data = ctx_data.get()
         repo = data.get("repo")
         worker_ids = await repo.get_post_ids("worker")
-        return message.from_user.id == worker_ids
+        return message.from_user.id in worker_ids
 
 
 class IsHRFilter(BoundFilter):
@@ -68,4 +68,4 @@ class IsHRFilter(BoundFilter):
         data = ctx_data.get()
         repo = data.get("repo")
         hr_ids = await repo.get_post_ids("hr")
-        return message.from_user.id == hr_ids
+        return message.from_user.id in hr_ids

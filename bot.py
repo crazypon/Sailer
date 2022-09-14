@@ -1,15 +1,26 @@
 import asyncio
 import configparser
+import logging
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
 from tgbot.teamstate_db.sql import create_pool
 from tgbot.middlewares.getputcon import DBMiddleware
-from tgbot.teamstate_db.myorm import DBCommands
 from tgbot.filters.filters import IsDirectorFilter
 from tgbot.handlers.role_giver import register_role_giver_handlers
+from tgbot.handlers.hr import register_hr_message_handlers
+from tgbot.filters.filters import IsHRFilter
+from tgbot.filters.filters import IsManagerFilter
+
+
+logger = logging.getLogger(__name__)
 
 
 async def main():
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+    )
+    logger.error("Starting bot")
     config = configparser.ConfigParser()
     config.read("bot.ini")
     redis_storage = RedisStorage2(port=6379, host='localhost')
@@ -25,12 +36,14 @@ async def main():
                 database=config['db']['database']
             )
     ))
-
-    # rep = DBCommands(session_pool)
-    # dp.bind_filter(IsDirectorFilter(rep))
+    # registering role filters
+    dp.bind_filter(IsDirectorFilter)
+    dp.bind_filter(IsHRFilter)
+    dp.bind_filter(IsManagerFilter)
 
     # registering our handlers
     register_role_giver_handlers(dp)
+    register_hr_message_handlers(dp)
 
     try:
         await dp.start_polling()
@@ -44,5 +57,5 @@ if __name__ == "__main__":
         task = loop.create_task(main())
         loop.run_forever()
     except KeyboardInterrupt:
-        print("stop")
+        logger.info('Bot stopped!')
 
