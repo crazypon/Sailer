@@ -14,11 +14,11 @@ async def start_checking_user(message: types.Message):
     await RoleAssigner.get_login.set()
 
 
-async def check_login(message: types.Message, state: FSMContext,repo):
+async def check_login(message: types.Message, state: FSMContext, repo):
     login = message.text
     user = await repo.check_login(login)
     if user:
-        await message.answer("Введите паролль")
+        await message.answer("Введите пароль")
         await state.update_data(login=login)
         await RoleAssigner.get_password.set()
     else:

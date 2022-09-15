@@ -8,6 +8,7 @@ from tgbot.middlewares.getputcon import DBMiddleware
 from tgbot.handlers.role_giver import register_role_giver_handlers
 from tgbot.handlers.hr import register_hr_message_handlers
 from tgbot.handlers.director import register_director_handlers
+from tgbot.handlers.manager import register_manager_handlers
 from tgbot.filters.filters import IsHRFilter, IsManagerFilter, IsDirectorFilter, IsWorkerFilter
 
 
@@ -45,6 +46,7 @@ async def main():
     register_role_giver_handlers(dp)
     register_hr_message_handlers(dp)
     register_director_handlers(dp)
+    register_manager_handlers(dp)
 
     try:
         await dp.start_polling()

@@ -42,6 +42,7 @@ class DBCommands:
 
     async def check_login(self, login):
         stmt = select(Worker.login).where(Worker.login == login)
+        print(login)
         val = await self.session.execute(stmt)
         login = val.scalar()
         return login
@@ -99,5 +100,8 @@ class DBCommands:
         await self.session.execute(stmt)
         await self.session.commit()
 
-    a
+    async def put_item(self, name, price):
+        stmt = self.session.add(Item).values(item_name=name, price=price)
+        await self.session.execute(stmt)
+        await self.session.commit()
 
