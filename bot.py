@@ -5,11 +5,10 @@ from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
 from tgbot.teamstate_db.sql import create_pool
 from tgbot.middlewares.getputcon import DBMiddleware
-from tgbot.filters.filters import IsDirectorFilter
 from tgbot.handlers.role_giver import register_role_giver_handlers
 from tgbot.handlers.hr import register_hr_message_handlers
-from tgbot.filters.filters import IsHRFilter
-from tgbot.filters.filters import IsManagerFilter
+from tgbot.handlers.director import register_director_handlers
+from tgbot.filters.filters import IsHRFilter, IsManagerFilter, IsDirectorFilter, IsWorkerFilter
 
 
 logger = logging.getLogger(__name__)
@@ -40,10 +39,12 @@ async def main():
     dp.bind_filter(IsDirectorFilter)
     dp.bind_filter(IsHRFilter)
     dp.bind_filter(IsManagerFilter)
+    dp.bind_filter(IsWorkerFilter)
 
     # registering our handlers
     register_role_giver_handlers(dp)
     register_hr_message_handlers(dp)
+    register_director_handlers(dp)
 
     try:
         await dp.start_polling()

@@ -86,4 +86,18 @@ class DBCommands:
         ))
         await self.session.commit()
 
+    async def show_worker_list(self):
+        stmt = select(Worker.id, Worker.name, Worker.surname, Worker.post).where(Worker.post != "director")
+        stmt = stmt.where(Worker.post != "hr")
+        val = await self.session.execute(stmt)
+        result = val.all()
+        return result
+
+    async def dismiss_worker(self, id):
+        # deleting worker from worker list
+        stmt = delete(Worker).where(Worker.id == id)
+        await self.session.execute(stmt)
+        await self.session.commit()
+
+    a
 

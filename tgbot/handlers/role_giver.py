@@ -44,13 +44,7 @@ async def check_password(message: types.Message, state: FSMContext, repo):
         return
 
 
-async def manager(message: types.Message):
-
-    await message.answer("manager")
-
-
 def register_role_giver_handlers(dp: Dispatcher):
     dp.register_message_handler(start_checking_user, commands=["start"])
     dp.register_message_handler(check_login, state=RoleAssigner.get_login)
     dp.register_message_handler(check_password, state=RoleAssigner.get_password)
-    dp.register_message_handler(manager, is_manager=True, commands=["manager"])
