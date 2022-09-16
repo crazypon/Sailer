@@ -87,12 +87,19 @@ class DBCommands:
         ))
         await self.session.commit()
 
-    async def show_worker_list(self):
-        stmt = select(Worker.id, Worker.name, Worker.surname, Worker.post).where(Worker.post != "director")
-        stmt = stmt.where(Worker.post != "hr")
-        val = await self.session.execute(stmt)
-        result = val.all()
-        return result
+    async def show_worker_list(self, only_seller=None):
+        if only_seller:
+            stmt = select(Worker.id, Worker.name, Worker.surname, Worker.post, Worker.login)
+            stmt = stmt.where(Worker.post != "hr").where(Worker != "manager").where(Worker.post != "director")
+            val = await self.session.execute(stmt)
+            result = val.all()
+            return result
+        else:
+            stmt = select(Worker.id, Worker.name, Worker.surname, Worker.post).where(Worker.post != "director")
+            stmt = stmt.where(Worker.post != "hr")
+            val = await self.session.execute(stmt)
+            result = val.all()
+            return result
 
     async def dismiss_worker(self, id):
         # deleting worker from worker list
@@ -105,3 +112,20 @@ class DBCommands:
         await self.session.execute(stmt)
         await self.session.commit()
 
+    async def get_sold_items(self, seller_login):
+        stmt = select(Item.item_name, Item.price).where(Purchase.login == seller_login)
+        val = await self.session.execute(stmt)
+        val = val.all()
+        return val
+
+    async def get_employee_name(self, login):
+        stmt = select(Worker.name, Worker.surname).where(Worker.login == login)
+        val = await self.session.execute(stmt)
+        res = val.scalar()
+        return res
+
+    async def get_seller_login(self, seller_id):
+        stmt = select(Worker.login).where(Worker.id == seller_id)
+        stmt = await self.session.execute(stmt)
+        val = stmt.scalar()
+        return val
