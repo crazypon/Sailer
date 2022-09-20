@@ -16,8 +16,8 @@ async def start_checking_user(message: types.Message):
 
 async def check_login(message: types.Message, state: FSMContext, repo):
     login = message.text
-    user = await repo.check_login(login)
-    if user:
+    user = await repo.check_worker_login(login)
+    if not user:
         await message.answer("Введите пароль")
         await state.update_data(login=login)
         await RoleAssigner.get_password.set()
@@ -38,6 +38,7 @@ async def check_password(message: types.Message, state: FSMContext, repo):
     if worker_password_hash == entered_password_hash:
         await message.answer("Вы успешно вошли в вашу учетную запись!")
         await repo.put_user_id(message.from_user.id, login)
+        await message.delete()
         await state.finish()
     else:
         await message.answer("Неправильный пароль! Ввведите заново")

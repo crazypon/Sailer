@@ -34,7 +34,6 @@ class IsManagerFilter(BoundFilter):
         data = ctx_data.get()
         repo = data.get("repo")
         is_manager = await repo.get_post_ids("manager")
-        print(is_manager)
         return message.from_user.id in is_manager
 
 
@@ -51,7 +50,7 @@ class IsWorkerFilter(BoundFilter):
         # getting repo
         data = ctx_data.get()
         repo = data.get("repo")
-        worker_ids = await repo.get_post_ids("worker")
+        worker_ids = await repo.get_post_ids("seller")
         return message.from_user.id in worker_ids
 
 
